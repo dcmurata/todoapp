@@ -8,10 +8,11 @@ getListTasks = async function () {
         connection = await mysql.createConnection(config.dbSetting);
         const sql = "SELECT * FROM t_task ";
         let d = [];
-        const [rows, fields] = await connection.query(sql, d);
+        const [tasks, fields] = await connection.query(sql, d);
         const sql2 = "SELECT * FROM m_category";
         const [categories, fields2] = await connection.query(sql2, d);
-        return Array(rows, categories);
+        const list = { tasks: tasks, categories: categories };
+        return list;
     } catch (err) {
         console.log(err);
     } finally {
