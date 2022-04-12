@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    crossorigin="anonymous" />
+  <link rel="stylesheet" href="../stylesheets/style.css" />
+
+  <title>Todoアプリ</title>
+</head>
+
+<body>
+  <div class="container">
+    <form id="task_view">
+      <div class="row">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createModalCenter">
+          + タスクを追加
+        </button>
+      </div>
+      <br>
+      <div class="row">
+        <input type="text" class="form-control col-8" readonly value="犬の餌を購入する">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModalCenter">更新</button>
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModalCenter">削除</button>
+      </div>
+      <br>
+      <div class="row">
+        <input type="text" class="form-control col-4" readonly value="犬の餌を購入する">
+        <button type="button" class="btn btn-primary">更新</button>
+        <button type="button" class="btn btn-danger">削除</button>
+      </div>
+
+    </form>
+
+
+    <!-- タスク追加モーダル -->
+    <div class="modal fade" id="createModalCenter" tabindex="-1" role="dialog" aria-labelledby="createModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createModalCenterTitle">タスク登録</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="title-text" class="col-form-label">タスク</label>
+                <input type="text" class="form-control" id="task" name="task">
+                <p id="task-name-error"></p>
+              </div>
+              <div class="form-group">
+                <label for="deadline" class="col-form-label">期限</label>
+                <input type="text" class="form-control" value="2017-06-01" id="deadline" name="deadline">
+              </div>
+              <div class="form-group">
+                <label for="category" class="col-form-label">カテゴリ</label><br>
+                <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="category" name="category">
+                  <option value="1">生活</option>
+                  <option value="2">勉強</option>
+                  <option value="3">仕事</option>
+                  <option value="4">趣味</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+            <button type="button" class="btn btn-primary" id="create-task">登録</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- タスク更新モーダル -->
+    <div class="modal fade" id="updateModalCenter" tabindex="-1" role="dialog" aria-labelledby="updateModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="updateModalCenterTitle">タスク更新</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 削除モーダル -->
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModalCenter" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalCenterTitle">タスク削除</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+
+  <script src="../javascripts/index.js"></script>
+
+  <script>
+
+    // タスク表示
+    $(async function () {
+      const data = await httpGet("//" + window.location.host + "/api/task-list");
+      console.log(data[1][0].id);
+      // const list = data.map((task) => {
+      //   // return `<li>${item.news}</li>`;
+      //   console.log(list);
+      // });
+      // $("ul#news-contents").append(list);
+    });
+
+    // タスク登録
+    //$(document).on('click', "#create-task", async function () {
+    $("#create-task").on("click", async function () {
+
+      const data = {
+        taskName: $("[name=task]").val(),
+        deadline: $("[name=deadline]").val(),
+        category: $("[name=category]").val(),
+      };
+      const response = await httpPost(
+        "//" + window.location.host + "/api/tasks",
+        data
+      );
+      location.reload();
+    });
+  </script>
+</body>
+
+</html>
