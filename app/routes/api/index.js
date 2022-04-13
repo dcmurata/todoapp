@@ -2,6 +2,7 @@ var express = require("express");
 const items = require("../../src/items");
 const create = require("../../src/tasks/create.js")
 const list = require("../../src/tasks/list.js")
+const del = require("../../src/tasks/delete.js")
 var router = express.Router();
 
 /* 商品一覧を取得するルーティング */
@@ -16,14 +17,23 @@ router.get("/items/:id", function (req, res, next) {
   res.send(item);
 });
 
+/* タスクを登録するルーティング */
 router.post("/tasks", async function (req, res, next) {
   console.log(req.body);
   const createTask = await create.postCreateTasks(req.body)
   res.send(createTask);
 });
 
+/* タスク一覧を取得するルーティング*/
 router.get("/task-list", async function (req, res, next) {
   const listTasks = await list.getListTasks();
   res.send(JSON.stringify(listTasks));
 });
+
+/* タスク一覧を削除するルーティング */
+router.delete("/tasks/:id", async function (req, res, next) {
+  const deleteTasksId = await del.deleteTasksId(req.params.id);
+  res.send(deleteTasksId);
+});
+
 module.exports = router;
