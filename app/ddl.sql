@@ -6,7 +6,8 @@ CREATE TABLE `todoapp`.`t_company` (
   `company_name` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY email(email)
 )DEFAULT CHARACTER SET utf8mb4;
 
 -- ユーザテーブル
@@ -15,7 +16,8 @@ CREATE TABLE `todoapp`.`t_user` (
   `user_name` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY(`id`),
+  UNIQUE KEY email (email)
 )DEFAULT CHARACTER SET utf8mb4;
 
 -- ユーザ管理テーブル
