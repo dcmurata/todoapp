@@ -2,8 +2,10 @@ var express = require("express");
 const items = require("../../src/items");
 const create = require("../../src/tasks/create.js");
 const list = require("../../src/tasks/list.js");
+const once = require("../../src/tasks/get.js");
 const update = require("../../src/tasks/update.js");
 const del = require("../../src/tasks/delete.js");
+
 var router = express.Router();
 
 /* 商品一覧を取得するルーティング */
@@ -31,6 +33,11 @@ router.get("/task-list", async function (req, res, next) {
   res.send(JSON.stringify(listTasks));
 });
 
+/* タスクを1件取するルーティング */
+router.get("/tasks/:id", async function (req, res, next) {
+  const getTasksId = await once.getTasksId(req.params.id);
+  res.send(getTasksId);
+});
 /* タスクを1件更新するルーティング */
 router.patch("/tasks/:id", async function (req, res, next) {
   const patchTasksId = await update.patchTasksId(req.params.id, req.body);
