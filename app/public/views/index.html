@@ -151,13 +151,34 @@
           <form id="search-form">
             <p>絞り込みの種類</p>
             <div class="form-group" id="search-items">
-              <input type="checkbox" name="search-item[]" value="done">完了したタスク<br>
-              <input type="checkbox" name="search-item[]" value="progress">作業中のタスク<br>
-              <input type="checkbox" name="search-item[]" value="untouched">未実施のタスク<br>
-              <input type="checkbox" name="search-item[]" value="life">生活<br>
-              <input type="checkbox" name="search-item[]" value="study">勉強<br>
-              <input type="checkbox" name="search-item[]" value="work">仕事<br>
-              <input type="checkbox" name="search-item[]" value="hobby">趣味<br>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="search-done" name="search-item[]" value="done">
+                <label class="form-check-label" for="search-done">完了したタスク</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="search-progress" name="search-item[]" value="progress">
+                <label class="form-check-label" for="search-progress">作業中のタスク</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="search-untouched" name="search-item[]" value="untouched">
+                <label class="form-check-label" for="search-untouched">未実施のタスク</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="search-life" name="search-item[]" value="life">
+                <label class="form-check-label" for="search-life">生活</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="search-study" name="search-item[]" value="study">
+                <label class="form-check-label" for="search-study">勉強</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="search-work" name="search-item[]" value="work">
+                <label class="form-check-label" for="search-work">仕事</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="search-hobby" name="search-item[]" value="hobby">
+                <label class="form-check-label" for="search-hobby">趣味</label>
+              </div>
             </div>
             <p>並び替えオプション</p>
             <div class="form-group">
