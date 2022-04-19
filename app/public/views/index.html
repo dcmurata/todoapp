@@ -148,26 +148,29 @@
           </button>
         </div>
         <div class="modal-body">
-          <form>
+          <form id="search-form">
             <p>絞り込みの種類</p>
             <div class="form-group" id="search-items">
-              <input type="checkbox" name="search-item" value="1">焼肉<br>
-              <input type="checkbox" name="search-item" value="2">ラーメン<br>
-              <input type="checkbox" name="search-item" value="3">フレッシュサラダ<br>
-              <input type="checkbox" name="search-item" value="4">100%オレンジジュース<br>
+              <input type="checkbox" name="search-item[]" value="done">完了したタスク<br>
+              <input type="checkbox" name="search-item[]" value="progress">作業中のタスク<br>
+              <input type="checkbox" name="search-item[]" value="untouched">未実施のタスク<br>
+              <input type="checkbox" name="search-item[]" value="life">生活<br>
+              <input type="checkbox" name="search-item[]" value="study">勉強<br>
+              <input type="checkbox" name="search-item[]" value="work">仕事<br>
+              <input type="checkbox" name="search-item[]" value="hobby">趣味<br>
             </div>
             <p>並び替えオプション</p>
             <div class="form-group">
               <label for="search-opt">並び替えの基準</label>
               <select class="form-control" name="search-opt" id="search-opt">
-                <option value="1">タスクの種類</option>
-                <option value="2">タスクの期限</option>
-                <option value="3">タスクのカテゴリ</option>
+                <option value="task_name">タスクの名前</option>
+                <option value="deadline">タスクの期限</option>
+                <option value="category_id">タスクのカテゴリ</option>
+                <option value="task_status">タスクのステータス</option>
               </select>
             </div>
-            <p>並び替えの順序</p>
             <div class="form-group">
-              <label for="search-sort">ステータス</label>
+              <label for="search-sort">並び替えの順序</label>
               <select class="form-control" name="search-sort" id="search-sort">
                 <option value="ASC" checked>昇順</option>
                 <option value="DESC">降順</option>
@@ -273,6 +276,73 @@
       $("ul#task-list").append(list);
     });
 
+    // 絞り込みモーダル
+    $("#search-task").on("click", async function () {
+
+      $("#task-list").empty();
+      let search_items = $('#search-form input[name="search-item[]"]:checked').map(function () {
+        return $(this).val();
+      }).get();
+
+      const requestData = {
+        search_items: search_items,
+        search_opt: $("#search-opt").val(),
+        search_sort: $("#search-sort").val(),
+      };
+      const response = await httpPost(
+        "//" + window.location.host + "/api/task-search",
+        requestData
+      );
+
+      const list = response.map((item) => {
+        // 日付を 年月日に変換
+        const date = new Date(item.deadline);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+
+        const deadline = year + "年" + month + "月" + day + "日";
+
+        let categoryClassName = "";
+        switch (item.category_id) {
+          case 1:
+            categoryClassName = "category-orange";
+            break;
+          case 2:
+            categoryClassName = "category-green";
+            break;
+          case 3:
+            categoryClassName = "category-blue";
+            break;
+          case 4:
+            categoryClassName = "category-red";
+            break;
+          default:
+          // なにもしない
+        }
+
+        // リストを表示
+        return `
+            <li class="list-group-item ${categoryClassName}">
+              <div class="row align-items-center">
+                <div class="col-6">
+                  <div>${item.task_name}</div>
+                </div>
+                <div class="col-3">
+                  <div>${deadline}</div>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-primary" data-updateid=${item.id} data-toggle="modal" data-target="#update-modal"　id="update-button">更新</button>
+                  <button type="button" class="btn btn-danger delete"  data-id=${item.id} data-delete==${item.task_name}>削除</button>
+                </div>
+              </div>
+            </li>`;
+      });
+
+      // ul タグにリストを追加
+      $("ul#task-list").append(list);
+    });
+
     // タスク登録
     $("#create-task").on("click", async function () {
 
@@ -308,8 +378,8 @@
       // 初期値をセット
       const modal = $(this);
       modal.find('#update-task').attr('data-updateid', id);
-      $("[name=update-task-name]").val(response[0].task_name),
-        $("#update-form input[name=update-deadline]").val(deadlineVal);
+      $("[#update-form input[name=update-task-name]").val(response[0].task_name);
+      $("#update-form input[name=update-deadline]").val(deadlineVal);
       $("#update-form select[name=update-category]").val(response[0].category_id);
       $("#update-form select[name=update-status]").val(response[0].task_status);
 
