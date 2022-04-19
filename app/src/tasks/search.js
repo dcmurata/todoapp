@@ -24,34 +24,42 @@ postSearchTask = async function (body) {
             for (const item of search_items) {
 
                 if (item === 'done') {
-                    sql += ' t_task.task_status = ?';
+                    sql += ' t_task.task_status = ? AND';
                     d.push(1);
                 } else if (item === 'progress') {
-                    sql += ' t_task.task_status = ?';
+                    sql += ' t_task.task_status = ? AND';
                     d.push(2);
                 } else if (item === 'untouched') {
-                    sql += ' t_task.task_status = ?';
+                    sql += ' t_task.task_status = ? AND';
                     d.push(3);
                 } else if (item === 'life') {
-                    sql += ' t_task.category_id = ?';
+                    sql += ' t_task.category_id = ? AND';
                     d.push(1);
                 } else if (item === 'study') {
-                    sql += ' t_task.category_id = ?';
+                    sql += ' t_task.category_id = ? AND';
                     d.push(2);
                 } else if (item === 'work') {
-                    sql += ' t_task.category_id = ?';
+                    sql += ' t_task.category_id = ? AND';
                     d.push(3);
                 } else if (item === 'hobby') {
-                    sql += ' t_task.category_id = ?';
+                    sql += ' t_task.category_id = ? AND';
                     d.push(4);
                 }
             }
         }
-
+        sql = rtrim(sql, 'AND');
         sql += ` ORDER BY ${search_opt} ${search_sort}`;
 
         const [list, fields] = await connection.query(sql, d);
         return list;
+
+        function rtrim(string, trimString) {
+            string = String(string);
+            trimString = String(trimString);
+            let i = string.length - trimString.length;
+
+            return string.lastIndexOf(trimString, i) === i ? string.slice(0, i) : string;
+        }
     } catch (err) {
         console.log(err);
     } finally {
