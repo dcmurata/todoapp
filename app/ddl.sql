@@ -1,9 +1,9 @@
 CREATE SCHEMA `todoapp` DEFAULT CHARACTER SET utf8mb4 ;
 
--- 企業テーブル
-CREATE TABLE `todoapp`.`t_company` (
+-- 組織テーブル
+CREATE TABLE `todoapp`.`t_organization` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `company_name` VARCHAR(255) NOT NULL,
+  `organization_name` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
@@ -24,10 +24,10 @@ CREATE TABLE `todoapp`.`t_user` (
 CREATE TABLE `todoapp`.`t_user_management` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
-  `company_id` INT NOT NULL,
+  `organization_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY fk_user(`user_id`) REFERENCES t_user(`id`) ON DELETE CASCADE,
-  FOREIGN KEY fk_company(`company_id`) REFERENCES t_company(`id`) ON DELETE CASCADE
+  FOREIGN KEY fk_organization(`organization_id`) REFERENCES t_organization(`id`) ON DELETE CASCADE
 )DEFAULT CHARACTER SET utf8mb4;
 
 -- カテゴリテーブル
