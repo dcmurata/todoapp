@@ -1,11 +1,18 @@
 var express = require("express");
 const items = require("../../src/items");
+
+// タスク関連ファイル
 const create = require("../../src/tasks/create.js");
 const list = require("../../src/tasks/list.js");
 const search = require("../../src/tasks/search.js");
 const once = require("../../src/tasks/get.js");
 const update = require("../../src/tasks/update.js");
 const del = require("../../src/tasks/delete.js");
+
+
+// 組織所属API関連ファイル
+const o_create = require("../../src/organization/create.js");
+
 
 var router = express.Router();
 
@@ -55,5 +62,13 @@ router.delete("/tasks/:id", async function (req, res, next) {
   const deleteTasksId = await del.deleteTasksId(req.params.id);
   res.send(deleteTasksId);
 });
+
+/* 組織所属ユーザを登録するルーティング */
+router.post("/regist/ouser", async function (req, res, next) {
+  console.log(req.body);
+  const createOuser = await o_create.postCreateOuser(req.body)
+  res.send(createOuser);
+});
+
 
 module.exports = router;
