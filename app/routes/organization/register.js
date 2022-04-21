@@ -2,10 +2,15 @@ const express = require('express');
 const router = express.Router();
 const mysql = require("mysql2/promise");
 const config = require("../../config.js");
+
 router.get('/', function (req, res, next) {
-    res.render('organization/register', {
-        title: '新規組織登録'
-    });
+    if (req.session.organization_id) {
+        res.redirect('/organization/home');
+    } else {
+        res.render('organization/register', {
+            title: '新規組織登録'
+        });
+    }
 });
 
 router.post('/', async function (req, res, next) {
@@ -36,20 +41,6 @@ router.post('/', async function (req, res, next) {
             const [insert_result, insert_fields] = await connection.query(registerQuery, insertData);
             res.redirect('/login');
         }
-        // const [rows, fields] = await connection.query(registerQuery);
-        // connection.query(emailExistsQuery, function (err, email) {
-        //     const emailExists = email.length;
-        //     if (emailExists) {
-        //         res.render('register', {
-        //             title: '新規組織登録',
-        //             emailExists: '既に登録されているメールアドレスです'
-        //         });
-        //     } else {
-        //         connection.query(registerQuery, function (err, rows) {
-        //             res.redirect('/login');
-        //         });
-        //     }
-        // });
     } catch (err) {
         console.log("エラー" + err);
     } finally {
