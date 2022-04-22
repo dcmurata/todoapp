@@ -14,8 +14,13 @@ var register = require('./routes/organization/register.js');
 var login = require('./routes/organization/login.js');
 var logout = require('./routes/organization/logout.js');
 var home = require('./routes/organization/home.js');
+var normal_login = require('./routes/normal/login.js');
+var normal_logout = require('./routes/normal/logout.js');
+var normal_home = require('./routes/normal/home.js');
+
 
 var setOrganizationUser = require('./setOrganizationUser');
+var setNormalUser = require('./setNormalUser');
 
 var app = express();
 
@@ -50,6 +55,15 @@ app.use('/organization/logout', logout);
 
 // 組織管理ユーザホーム
 app.use('/organization/home', setOrganizationUser, home);
+
+// 一般ユーザログイン
+app.use('/normal/login', normal_login);
+
+// 一般ユーザログアウト
+app.use('/normal/logout', normal_logout);
+
+// 一般ユーザホーム
+app.use('/normal/home', setNormalUser, normal_home);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

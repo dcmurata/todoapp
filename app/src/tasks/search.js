@@ -13,53 +13,47 @@ postSearchTask = async function (body) {
 
 
         let sql =
-            `SELECT t_task.id, t_task.category_id, m_category.category_name, t_task.task_name, t_task.deadline, t_task.task_status, t_task.updated_at, t_task.created_at 
-        FROM t_task LEFT JOIN m_category ON t_task.category_id = m_category.id WHERE`;
+            `SELECT t_task.*, m_category.category_name
+        FROM m_category RIGHT JOIN t_task ON m_category.id = t_task.category_id
+        LEFT JOIN t_task_management ON t_task.id = t_task_management.task_id
+        LEFT JOIN t_user_management ON t_task_management.user_management_id = t_user_management.id
+        WHERE t_user_management.user_id = ?`;
 
-        let d = [];
+        let d = [body.nid];
 
-        if (search_items.length == 0) {
-            sql += ' 1 = 1';
-        } else {
+        if (search_items.length > 0) {
+
             for (const item of search_items) {
 
                 if (item === 'done') {
-                    sql += ' t_task.task_status = ? AND';
+                    sql += ' AND t_task.task_status = ?';
                     d.push(1);
                 } else if (item === 'progress') {
-                    sql += ' t_task.task_status = ? AND';
+                    sql += ' AND t_task.task_status = ?';
                     d.push(2);
                 } else if (item === 'untouched') {
-                    sql += ' t_task.task_status = ? AND';
+                    sql += ' AND t_task.task_status = ?';
                     d.push(3);
                 } else if (item === 'life') {
-                    sql += ' t_task.category_id = ? AND';
+                    sql += ' AND t_task.category_id = ?';
                     d.push(1);
                 } else if (item === 'study') {
-                    sql += ' t_task.category_id = ? AND';
+                    sql += ' AND t_task.category_id = ?';
                     d.push(2);
                 } else if (item === 'work') {
-                    sql += ' t_task.category_id = ? AND';
+                    sql += ' AND t_task.category_id = ?';
                     d.push(3);
                 } else if (item === 'hobby') {
-                    sql += ' t_task.category_id = ? AND';
+                    sql += ' AND t_task.category_id = ?';
                     d.push(4);
                 }
             }
         }
-        sql = rtrim(sql, 'AND');
         sql += ` ORDER BY ${search_opt} ${search_sort}`;
 
         const [list, fields] = await connection.query(sql, d);
         return list;
 
-        function rtrim(string, trimString) {
-            string = String(string);
-            trimString = String(trimString);
-            let i = string.length - trimString.length;
-
-            return string.lastIndexOf(trimString, i) === i ? string.slice(0, i) : string;
-        }
     } catch (err) {
         console.log(err);
     } finally {
@@ -68,3 +62,11 @@ postSearchTask = async function (body) {
 };
 
 exports.postSearchTask = postSearchTask;
+
+function rtrim(string, trimString) {
+    string = String(string);
+    trimString = String(trimString);
+    let i = string.length - trimString.length;
+
+    return string.lastIndexOf(trimString, i) === i ? string.slice(0, i) : string;
+}

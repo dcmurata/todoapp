@@ -15,7 +15,7 @@
         <p class="main-title">
             <%= title %>
         </p>
-        <form action="/organization/login" method="post" class="board-form">
+        <form action="/normal/login" method="post" class="board-form">
             <span class="label">メールアドレス</span><input type="email" name="email" class="input" required><br>
             <br>
             <span class="label">パスワード</span><input type="password" name="password" class="input" required><br>
@@ -27,8 +27,6 @@
                 <%= noUser %>
             </p>
             <% } %>
-                <a href="/organization/register" class="btn">新規組織登録はこちら</a>
-                <br>
-                <a href="/normal/login" class="btn">一般ユーザの方はこちら</a>
+                <a href="/organization/login" class="btn">管理者の方はこちら</a>
     </div>
 </body>

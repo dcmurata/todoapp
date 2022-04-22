@@ -12,6 +12,7 @@ const del = require("../../src/tasks/delete.js");
 
 // 組織所属API関連ファイル
 const o_create = require("../../src/organization/create.js");
+const o_list = require("../../src/organization/list.js");
 
 
 var router = express.Router();
@@ -63,6 +64,15 @@ router.delete("/tasks/:id", async function (req, res, next) {
   res.send(deleteTasksId);
 });
 
+/////////////////////////////////////////////////////////////
+//  組織管理ユーザ関連API
+/////////////////////////////////////////////////////////////
+
+/* ユーザ一覧を取得するルーティング*/
+router.get("/task-list", async function (req, res, next) {
+  const listOrganizations = await o_list.getListOrganizations();
+  res.send(JSON.stringify(listOrganizations));
+});
 /* 組織所属ユーザを登録するルーティング */
 router.post("/regist/ouser", async function (req, res, next) {
   console.log(req.body);
