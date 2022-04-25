@@ -12,7 +12,11 @@ const del = require("../../src/tasks/delete.js");
 
 // 組織所属API関連ファイル
 const o_create = require("../../src/organization/create.js");
-const o_list = require("../../src/organization/list.js");
+const o_get = require("../../src/organization/get.js");
+const o_update = require("../../src/organization/update.js");
+const o_delete = require("../../src/organization/delete.js");
+
+
 
 
 var router = express.Router();
@@ -58,7 +62,7 @@ router.patch("/tasks/:id", async function (req, res, next) {
   res.send(patchTasksId);
 });
 
-/* タスク一覧を削除するルーティング */
+/* タスクを削除するルーティング */
 router.delete("/tasks/:id", async function (req, res, next) {
   const deleteTasksId = await del.deleteTasksId(req.params.id);
   res.send(deleteTasksId);
@@ -68,17 +72,30 @@ router.delete("/tasks/:id", async function (req, res, next) {
 //  組織管理ユーザ関連API
 /////////////////////////////////////////////////////////////
 
-/* ユーザ一覧を取得するルーティング*/
-router.get("/task-list", async function (req, res, next) {
-  const listOrganizations = await o_list.getListOrganizations();
-  res.send(JSON.stringify(listOrganizations));
+/* ユーザを1件取するルーティング */
+router.get("/get/ouser/:id", async function (req, res, next) {
+  const getUserId = await o_get.getUserId(req.params.id);
+  res.send(getUserId);
 });
+
 /* 組織所属ユーザを登録するルーティング */
 router.post("/regist/ouser", async function (req, res, next) {
-  console.log(req.body);
   const createOuser = await o_create.postCreateOuser(req.body)
   res.send(createOuser);
 });
+
+/* ユーザを1件更新するルーティング */
+router.patch("/update/ouser/:id", async function (req, res, next) {
+  const patchUserId = await o_update.patchUserId(req.params.id, req.body);
+  res.send(patchUserId);
+});
+
+/* ユーザを削除するルーティング */
+router.delete("/delete/ouser/:id", async function (req, res, next) {
+  const deleteUserId = await o_delete.deleteUserId(req.params.id);
+  res.send(deleteUserId);
+});
+
 
 
 module.exports = router;
