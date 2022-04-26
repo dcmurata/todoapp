@@ -15,13 +15,15 @@
 </head>
 
 <body>
+    <input type="hidden" id="organization-id" value="<%= oid %>" />
+
     <div class="container-fluid d-flex flex-column vw-100 vh-100 m-0 p-0 position-absolute">
         <!-- ヘッダ -->
         <div class="header bg-dark start-0 d-flex flex-row justify-content-center align-items-center position-relative">
             <% if (typeof organization_user !== 'undefined') { %>
                 <p class="display-5 text-white font-weight-bold">
-                    管理者
-                    <%= organization_user.organization_name %>さんとしてログイン中
+                    管理者【
+                    <%= organization_user.organization_name %>】さんとしてログイン中
                 </p>
                 <% } %>
         </div>
@@ -36,51 +38,100 @@
             <!-- メインコンテンツ -->
             <div class="main w-75 start-25 position-relative d-flex flex-column">
                 <div class="view-header">
-                    <p>ユーザ一覧</p>
-                    <% if (typeof category !== 'undefined') { %>
-
-                        <table>
-                            <% for (let i = 0; i < category.length; i++) { %>
-                                <tr>
-                                    <td>
-                                        <%= category[i].id %>
-                                    </td>
-                                </tr>
-                                <% } %>
-                        </table>
-                        <% } %>
-
-
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#search-modal">
-                                絞り込み
-                            </button>
+                    <p>組織に所属しているユーザの一覧</p>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#search-modal">
+                        絞り込み
+                    </button>
                 </div>
                 <div class="view-body h-100">
                     <ul class="list-group" id="task-list">
                         <!-- ユーザ一覧を表示 -->
-                        <% for (let i = 0; i < o_users.length; i++) { %>
-                            <li class="list-group-item ${categoryClassName}">
-                                <div class="row align-items-center">
-                                    <div class="col-6">
-                                        <div>
-                                            <%= o_users[i].user_name %>
+                        <% if (typeof o_users !== 'undefined') { %>
+                            <% for (let i = 0; i < o_users.length; i++) { %>
+                                <div class="panel-group border">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <div class="row align-items-center">
+                                                <div class="col-9">
+                                                    <div>
+                                                        <a data-toggle="collapse" href="#collapse<%= i %>">
+                                                            【ユーザ】
+                                                            <%= o_users[i].user_name %>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <button type="button" class="btn btn-primary h-50" data-updateuserid="<%= o_users[i].user_id %>" data-toggle="modal" data-target="#update-user-modal"
+                                                        　id="update-user-button">更新</button>
+                                                    <button type="button" class="btn btn-danger user-delete" data-userid="<%= o_users[i].user_id %>" data-delete="<%= o_users[i].user_name %>">削除</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="collapse<%= i %>" class="panel-collapse collapse">
+                                            <ul class="list-group">
+                                                <!-- ユーザに紐づいたタスクの一覧を表示 -->
+                                                <% if (typeof tasks !== 'undefined') { %>
+                                                    <% for (let j = 0; j < tasks.length; j++) { %>
+                                                        <% if (tasks[j].um_id == o_users[i].um_id) { %>
+                                                            <% 
+                                    const date = new Date(tasks[j].deadline);
+                                    const year = date.getFullYear();
+                                    const month = date.getMonth() + 1;
+                                    const day = date.getDate();
+
+                                    const deadline = year + "年" + month + "月" + day + "日";
+
+                                    let categoryClassName = "";
+
+                                    switch (tasks[j].category_id) { 
+                                        case 1: categoryClassName = "category-orange"; 
+                                                break; 
+                                        case 2: categoryClassName = "category-green";
+                                                break;
+                                        case 3: categoryClassName = "category-blue";
+                                                break;
+                                        case 4: categoryClassName = "category-red";
+                                                break; 
+                                        default:
+                                    }
+                                %>
+
+                                                                <li class="list-group-item <%= categoryClassName %>">
+                                                                    <div class="row align-items-center">
+                                                                        <div class="col-6">
+                                                                            <div>
+                                                                                【タスク】
+                                                                                <%= tasks[j].task_name %>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-3">
+                                                                            <div>
+                                                                                <%= deadline %>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-3">
+                                                                            <button type="button" class="btn btn-primary" data-updateid="<%= tasks[j].id %>" data-toggle="modal" data-target="#update-modal"
+                                                                                　id="update-button">更新</button>
+                                                                            <button type="button" class="btn btn-danger delete" data-id="<%= tasks[j].id %>" data-delete="<%= tasks[j].task_name %>">削除</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+
+                                                                <% } %>
+                                                                    <% } %>
+                                                                        <% } %>
+                                            </ul>
+                                            <div class="panel-footer">フッター</div>
                                         </div>
                                     </div>
-                                    <!-- <div class="col-3">
-                                    <div>${deadline}</div>
-                                </div> -->
-                                    <div class="col-3">
-                                        <button type="button" class="btn btn-primary" data-updateid="<%= o_users[i].id %>" data-toggle="modal" data-target="#update-modal"
-                                            　id="update-button">更新</button>
-                                        <button type="button" class="btn btn-danger delete" data-id="<%= o_users[i].id %>" data-delete==${item.task_name}>削除</button>
-                                    </div>
                                 </div>
-                            </li>
-                            <% } %>
+
+                                <% } %>
+                                    <% } %>
                     </ul>
                 </div>
                 <div class="view-footer">
-                    <button type="button" class="btn btn-primary w-100" data-toggle="modal" data-target="#create-modal">
+                    <button type="button" class="btn btn-primary w-100" data-toggle="modal" data-target="#create-user-modal">
                         +組織所属ユーザ登録
                     </button>
                 </div>
@@ -89,30 +140,28 @@
     </div>
 
     <!-- モーダル 新規組織所属ユーザ登録 -->
-    <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-labelledby="create-modal" aria-hidden="true">
+    <div class="modal fade" id="create-user-modal" tabindex="-1" role="dialog" aria-labelledby="create-user-modal" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="create-modal">新規所属ユーザ登録</h5>
+                    <h5 class="modal-title" id="create-user-modal">新規所属ユーザ登録</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <form>
                     <div class="modal-body">
-
-                        <input type="hidden" id="organization-id" value="<%= sid %>" />
                         <div class="form-group">
-                            <label for="task">ユーザ名</label>
-                            <input type="text" class="form-control" id="user-name" name="user-name" />
+                            <label for="create-user-name">ユーザ名</label>
+                            <input type="text" class="form-control" id="create-user-name" name="user-name" />
                         </div>
                         <div class="form-group">
-                            <label for="deadline">メールアドレス</label>
-                            <input type="text" class="form-control" id="email" name="email" />
+                            <label for="create-email">メールアドレス</label>
+                            <input type="text" class="form-control" id="create-email" name="email" />
                         </div>
                         <div class="form-group">
-                            <label for="deadline">パスワード</label>
-                            <input type="password" class="form-control" id="password" name="password" />
+                            <label for="create-password">パスワード</label>
+                            <input type="password" class="form-control" id="create-password" name="password" />
                         </div>
 
                     </div>
@@ -128,41 +177,31 @@
             </div>
         </div>
     </div>
-    <!-- モーダル 新規登録 END -->
+    <!-- モーダル 新規組織所属ユーザ登録 END -->
 
-    <!-- モーダル 更新 -->
-    <div class="modal fade" id="update-modal" tabindex="-1" role="dialog" aria-labelledby="update-modal" aria-hidden="true">
+    <!-- モーダル ユーザ情報更新 -->
+    <div class="modal fade" id="update-user-modal" tabindex="-1" role="dialog" aria-labelledby="update-user-modal" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="update-modal">更新</h5>
+                    <h5 class="modal-title" id="update-user-modal">更新</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="update-form">
+                    <form id="update-user-form">
                         <div class="form-group">
-                            <label for="update-task-name">タスク</label>
-                            <input type="text" class="form-control" id="update-task-name" name="update-task-name" />
+                            <label for="update-user-name">ユーザ名</label>
+                            <input type="text" class="form-control" id="update-user-name" name="user-name" />
                         </div>
                         <div class="form-group">
-                            <label for="update-deadline">期限</label>
-                            <input type="date" class="form-control" id="update-deadline" name="update-deadline" />
+                            <label for="update-email">メールアドレス</label>
+                            <input type="text" class="form-control" id="update-email" name="email" />
                         </div>
                         <div class="form-group">
-                            <label for="uodate-category">カテゴリ</label>
-                            <select class="form-control" name="update-category" name="update-category" id="update-category">
-                                <!-- jsで動的に追加 -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="update-status">ステータス</label>
-                            <select class="form-control" name="update-status" id="update-status">
-                                <option value="1">完了</option>
-                                <option value="2">作業中</option>
-                                <option value="3">未実施</option>
-                            </select>
+                            <label for="update-password">パスワード</label>
+                            <input type="password" class="form-control" id="update-password" name="password" />
                         </div>
                     </form>
                 </div>
@@ -170,7 +209,7 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
                         キャンセル
                     </button>
-                    <button type="button" data-dismiss="modal" class="btn btn-primary" id="update-task">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary" id="update-user">
                         保存
                     </button>
                 </div>
@@ -264,94 +303,74 @@
 
     <script src="../javascripts/index.js"></script>
     <script>
-        $(async function () {
-
-            const date = new Date();
-            const yyyy = date.getFullYear();
-            const mm = ("0" + (date.getMonth() + 1)).slice(-2);
-            const dd = ("0" + date.getDate()).slice(-2);
-            const currrent = yyyy + '-' + mm + '-' + dd;
-
-            // 期限のデフォルトの日付を現在に設定
-            $("#deadline").val(currrent);
-            $("#update-deadline").val(currrent);
-
-            const data = await httpGet("//" + window.location.host + "/api/task-list");
-
-            const categ = data.categories.map((category) => {
-                return `<option value="${category.id}">${category.category_name}</option>`;
-            });
-
-            // カテゴリの一覧をデータベースから取得しセレクトボックスに反映させる
-            $("#category").append(categ);
-            $("#update-category").append(categ);
-
-            const list = data.tasks.map((item) => {
-                // 日付を 年月日に変換
-                const date = new Date(item.deadline);
-                const year = date.getFullYear();
-                const month = date.getMonth() + 1;
-                const day = date.getDate();
-
-                const deadline = year + "年" + month + "月" + day + "日";
-
-                let categoryClassName = "";
-                switch (item.category_id) {
-                    case 1:
-                        categoryClassName = "category-orange";
-                        break;
-                    case 2:
-                        categoryClassName = "category-green";
-                        break;
-                    case 3:
-                        categoryClassName = "category-blue";
-                        break;
-                    case 4:
-                        categoryClassName = "category-red";
-                        break;
-                    default:
-                    // なにもしない
-                }
-
-                // リストを表示
-                return `
-            <li class="list-group-item ${categoryClassName}">
-              <div class="row align-items-center">
-                <div class="col-6">
-                  <div>${item.task_name}</div>
-                </div>
-                <div class="col-3">
-                  <div>${deadline}</div>
-                </div>
-                <div class="col-3">
-                  <button type="button" class="btn btn-primary" data-updateid=${item.id} data-toggle="modal" data-target="#update-modal"　id="update-button">更新</button>
-                  <button type="button" class="btn btn-danger delete"  data-id=${item.id} data-delete==${item.task_name}>削除</button>
-                </div>
-              </div>
-            </li>`;
-            });
-
-            // ul タグにリストを追加
-            $("ul#task-list").append(list);
-        });
 
         // 組織所属ユーザ登録
         $("#create-user").on("click", async function () {
 
             const data = {
-                userName: $("#user-name").val(),
-                email: $("#email").val(),
-                password: $("#password").val(),
+                userName: $("#create-user-name").val(),
+                email: $("#create-email").val(),
+                password: $("#create-password").val(),
                 oid: $("#organization-id").val(),
             };
 
-            console.log(data);
             const response = await httpPost(
                 "//" + window.location.host + "/api/regist/ouser",
                 data
             );
             window.location.reload();
         });
+
+        // ユーザ更新モーダルに更新したいユーザのIDを渡す
+        $('#update-user-modal').on('show.bs.modal', async function (event) {
+            const button = $(event.relatedTarget);
+            const id = button.data('updateuserid');
+
+            console.log(button);
+            const response = await httpGet(
+                "//" + window.location.host + `/api/get/ouser/${id}`
+            );
+
+
+            // 初期値をセット
+            const modal = $(this);
+            modal.find('#update-user').attr('data-updateuserid', id);
+            $("#update-user-name").val(response[0].user_name);
+            $("#update-email").val(response[0].email);
+
+        });
+
+        // ユーザ情報更新
+        $("#update-user").on("click", async function () {
+            const id = $(this).data("updateuserid");
+
+            const requestData = {
+                userName: $("#update-user-name").val(),
+                email: $("#update-email").val(),
+                password: $("#update-password").val(),
+            };
+            const response = await httpUpdate(
+                "//" + window.location.host + `/api/update/ouser/${id}`,
+                requestData
+            );
+
+            window.location.reload();
+        });
+
+        // ユーザ削除
+        $(document).on("click", ".user-delete", async function () {
+            const userName = $(this).data("delete");
+            if (confirm(`以下のユーザを削除します。\n ${userName}`)) {
+
+                const id = $(this).data("id");
+                const response = await httpDelete(
+                    "//" + window.location.host + `/api/delete/ouser/${id}`
+                );
+
+                window.location.reload();
+            }
+        });
+
     </script>
 </body>
 
