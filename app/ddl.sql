@@ -1,5 +1,7 @@
 CREATE SCHEMA `todoapp` DEFAULT CHARACTER SET utf8mb4 ;
 
+USE todoapp;
+
 -- 組織テーブル
 CREATE TABLE `todoapp`.`t_organization` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -59,3 +61,8 @@ CREATE TABLE `todoapp`.`t_task_management` (
   FOREIGN KEY fk_user_management(`user_management_id`) REFERENCES t_user_management(`id`) ON DELETE CASCADE,
   FOREIGN KEY fk_taskt(`task_id`) REFERENCES t_task(`id`) ON DELETE CASCADE
 )DEFAULT CHARACTER SET utf8mb4;
+
+INSERT INTO `todoapp`.`m_category` (`category_name`) VALUES ('生活');
+INSERT INTO `todoapp`.`m_category` (`category_name`) VALUES ('勉強');
+INSERT INTO `todoapp`.`m_category` (`category_name`) VALUES ('仕事');
+INSERT INTO `todoapp`.`m_category` (`category_name`) VALUES ('趣味');
