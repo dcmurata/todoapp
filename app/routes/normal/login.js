@@ -33,7 +33,7 @@ router.post('/', async function (req, res, next) {
             res.redirect('/normal/home');
         } else {
             res.render('normal/login', {
-                title: 'ログイン',
+                title: '一般ユーザログイン',
                 noUser: 'メールアドレスとパスワードが一致するユーザーはいません'
             });
         }
