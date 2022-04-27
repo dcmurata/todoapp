@@ -148,7 +148,9 @@
                 </p>
                 <label for="inputOrganization">組織名</label>
                 <input type="text" id="inputOrganization" class="form-control" name="organization_name" required autofocus>
-                <input type="email" id="inputEmail" class="form-control" placeholder="メールアドレス" name="email" required autofocus>
+                <label for="inputEmail">メールアドレス</label>
+                <input type="email" id="inputEmail" class="form-control" placeholder="example@example.com" name="email" required autofocus>
+                <label for="inputPassword">パスワード</label>
                 <input type="password" id="inputPassword" class="form-control" placeholder="パスワード" name="password" required>
 
                 <button class="btn btn-lg btn-primary btn-block btn-regist" type="submit">登録</button>
@@ -160,7 +162,7 @@
                 <% } %>
                     <a href="/organization/login" class="btn">ログイン</a>
                     <br>
-                    <a href="/normal/regist" class="btn">一般ユーザの方はこちら</a>
+                    <a href="/normal/login" class="btn">一般ユーザの方はこちら</a>
         </div>
     </div>
 
