@@ -66,3 +66,14 @@ INSERT INTO `todoapp`.`m_category` (`category_name`) VALUES ('生活');
 INSERT INTO `todoapp`.`m_category` (`category_name`) VALUES ('勉強');
 INSERT INTO `todoapp`.`m_category` (`category_name`) VALUES ('仕事');
 INSERT INTO `todoapp`.`m_category` (`category_name`) VALUES ('趣味');
+
+-- todoappデータベース内のすべてのテーブルを削除するsqlを出力してくれる(テーブルが増える場合などに便利)
+SELECT CONCAT(
+	'DROP TABLE ', GROUP_CONCAT(
+		CONCAT('`',table_name,'`')
+	),';'
+) AS statement FROM information_schema.tables 
+WHERE table_schema = 'todoapp' AND table_name LIKE '%';
+
+-- 今回のテーブル構成だと↑のsqlの出力結果は以下の通り
+DROP TABLE `m_category`,`t_organization`,`t_task`,`t_task_management`,`t_user`,`t_user_management`;
