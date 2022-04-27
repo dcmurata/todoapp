@@ -23,33 +23,39 @@ postSearchTask = async function (body) {
 
         if (search_items.length > 0) {
 
+            sql += 'AND (';
+
             for (const item of search_items) {
 
                 if (item === 'done') {
-                    sql += ' AND t_task.task_status = ?';
+                    sql += 't_task.task_status = ?  OR ';
                     d.push(1);
                 } else if (item === 'progress') {
-                    sql += ' AND t_task.task_status = ?';
+                    sql += 't_task.task_status = ? OR ';
                     d.push(2);
                 } else if (item === 'untouched') {
-                    sql += ' AND t_task.task_status = ?';
+                    sql += 't_task.task_status = ? OR ';
                     d.push(3);
                 } else if (item === 'life') {
-                    sql += ' AND t_task.category_id = ?';
+                    sql += 't_task.category_id = ? OR ';
                     d.push(1);
                 } else if (item === 'study') {
-                    sql += ' AND t_task.category_id = ?';
+                    sql += 't_task.category_id = ? OR ';
                     d.push(2);
                 } else if (item === 'work') {
-                    sql += ' AND t_task.category_id = ?';
+                    sql += 't_task.category_id = ? OR ';
                     d.push(3);
                 } else if (item === 'hobby') {
-                    sql += ' AND t_task.category_id = ?';
+                    sql += 't_task.category_id = ? OR ';
                     d.push(4);
                 }
             }
+
+            sql = rtrim(sql, ' OR ');
+            sql += ') ';
         }
-        sql += ` ORDER BY ${search_opt} ${search_sort}`;
+
+        sql += `ORDER BY ${search_opt} ${search_sort}`;
 
         const [list, fields] = await connection.query(sql, d);
         return list;
