@@ -39,7 +39,8 @@ router.post('/', async function (req, res, next) {
             });
         } else {
             const [insert_result, insert_fields] = await connection.query(registerQuery, insertData);
-            res.redirect('/login');
+            req.session.organization_id = insert_result.insertId;
+            res.redirect('/organization/login');
         }
     } catch (err) {
         console.log("エラー" + err);
