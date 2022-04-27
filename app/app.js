@@ -9,6 +9,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
+var baseRouter = require('./routes/base.js');
 var apiRouter = require("./routes/api/index.js");
 var register = require('./routes/organization/register.js');
 var login = require('./routes/organization/login.js');
@@ -19,6 +20,7 @@ var normal_logout = require('./routes/normal/logout.js');
 var normal_home = require('./routes/normal/home.js');
 
 
+// セッション管理
 var setOrganizationUser = require('./setOrganizationUser');
 var setNormalUser = require('./setNormalUser');
 
@@ -40,6 +42,8 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
+
+app.use("/", baseRouter);
 
 // API ルーティングファイル
 app.use("/api", apiRouter);
@@ -67,7 +71,8 @@ app.use('/normal/home', setNormalUser, normal_home);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  next(createError(404));
+  // next(createError(404));
+  res.status(404).send("<h1>ページが見つかりません</h1>");
 });
 
 // error handler
