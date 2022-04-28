@@ -17,6 +17,8 @@ $ docker-compose exec db bash
 
 以降は通常のmysqlと同様にログインしてデータベースを操作できる
 
+mysqlにログインしたら`app/ddl.sql`内のカテゴリ項目の追加まで行う
+
 ### expressを立ち上げる
 1. `app`内に移動
 ```sh
