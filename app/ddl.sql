@@ -62,6 +62,7 @@ CREATE TABLE `todoapp`.`t_task_management` (
   FOREIGN KEY fk_taskt(`task_id`) REFERENCES t_task(`id`) ON DELETE CASCADE
 )DEFAULT CHARACTER SET utf8mb4;
 
+-- カテゴリ項目の追加
 INSERT INTO `todoapp`.`m_category` (`category_name`) VALUES ('生活');
 INSERT INTO `todoapp`.`m_category` (`category_name`) VALUES ('勉強');
 INSERT INTO `todoapp`.`m_category` (`category_name`) VALUES ('仕事');
